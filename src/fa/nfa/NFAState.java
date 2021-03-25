@@ -19,7 +19,7 @@ public class NFAState extends State {
      * Basic Constructor
      */
     public NFAState(String name){
-        transitions = new HashMap<>();
+        this.transitions = new HashMap<>();
         super.name = name;
     }
 
@@ -36,13 +36,12 @@ public class NFAState extends State {
      * @param sym the symbol being transitioned on
      * @param state the state we transition to on sym
      */
-    public void setTransitions(String sym,String state) {
+    public void setTransitions(String sym,NFAState state) {
         if(transitions.containsKey(sym)){
             updateMapSet(sym,state);
         }else{
             Set<NFAState> set = new HashSet<>();
-            NFAState currState = new NFAState(state);
-            set.add(currState.equals(this)? this:currState);
+            set.add(state);
             transitions.put(sym,set);
         }
     }
@@ -52,8 +51,8 @@ public class NFAState extends State {
      * @param sym the symbol being transitioned on
      * @param state the state we transition to on sym
      */
-    public void updateMapSet(String sym,String state){
-        transitions.get(sym).add(new NFAState(state));
+    public void updateMapSet(String sym,NFAState state){
+        transitions.get(sym).add(state);
     }
 
     /**
