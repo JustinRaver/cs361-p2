@@ -25,10 +25,10 @@ public class NFAState extends State {
 
     /**
      *
-     * @return the States transitions
+     * @return the States transitions or null if they are absent
      */
     public Set<NFAState> getTransitions(String s){
-        return this.transitions.get(s);
+            return this.transitions.get(s);
     }
 
     /**

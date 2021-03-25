@@ -2,6 +2,7 @@ package fa.nfa;
 
 import fa.State;
 import fa.dfa.DFA;
+import fa.dfa.DFAState;
 
 import java.util.*;
 
@@ -12,10 +13,10 @@ import java.util.*;
 public class NFA implements NFAInterface {
 
     //instance variables
-    private final Set<State> states;
+    private final Set<NFAState> states;
     private final Set<Character> alphabet;
-    private State startState;
-    private final Set<State> finalStates;
+    private NFAState startState;
+    private final Set<NFAState> finalStates;
 
     /**
      * Basic Constructor
@@ -51,6 +52,9 @@ public class NFA implements NFAInterface {
 
     @Override
     public void addTransition(String fromState, char onSym, String toState) {
+            //add transistion symbol to the alphabet
+            alphabet.add(onSym);
+            //add transition
             Objects.requireNonNull(getState(fromState)).setTransitions(String.valueOf(onSym), toState);
     }
 
@@ -76,15 +80,32 @@ public class NFA implements NFAInterface {
 
     @Override
     public DFA getDFA() {
+        //keep track of visited States
+        Set<String> visited = new HashSet<>();
+
         //DFA to build
         DFA dfa = new DFA();
+
         //create queue for breadth first search
-        Queue<NFAState> q = new LinkedList<>();
+        Queue<Set<NFAState>> q = new LinkedList<>();
         //queue start state
-        q.add(startState);
-        dfa.addFinalState();
-        //dequeue and queue all child nodes
-        return null;
+        q.add(eClosure(startState));
+
+        while(!q.isEmpty()){
+            //dequeue a state
+            Set<NFAState> states = q.remove();
+            //build dfa state and add it to visited
+            visited.add(dfaStateBuilder(states,dfa));
+
+            for (Character c: alphabet){
+                String s = String.valueOf(c);
+                Set<NFAState> nfa = combineSets(dfa,states,visited,s);
+                if(nfa != null){
+                    q.add(nfa);
+                }
+            }
+        }
+        return dfa;
     }
 
     @Override
@@ -139,5 +160,61 @@ public class NFA implements NFAInterface {
             }
         }
         return false;
+    }
+
+    /**
+     *
+     * @param state state to compare
+     * @return true if the state is teh start state false otherwise
+     */
+    private boolean isStart(NFAState state){
+        return state.equals(startState);
+    }
+
+    /**
+     *
+     * @param set the set of nfa states
+     * @param s the transition symbol
+     * @return the set of combined transitions
+     */
+    private Set<NFAState> combineSets(DFA dfa, Set<NFAState> set,Set<String> visited,String s){
+        Set<NFAState> transSet = new HashSet<>();
+        String name="";
+        int i=1;
+        for (NFAState state: set){
+            name = (i==set.size()? state.toString():state.toString()+", ");
+            transSet.addAll(state.getTransitions(s));
+            i++;
+        }
+        return visited.contains(name) ? null:transSet;
+    }
+
+    /**
+     *
+     * @param set set of NFA states
+     * @param dfa the DFA being created
+     * @return the name of the new state
+     */
+    private String dfaStateBuilder(Set<NFAState> set,DFA dfa){
+        String name = "";
+        int i = 1;
+        // start=-1 final=1 regular =0
+        int sfr = 0;
+        for(NFAState state: set){
+            if(isFinal(state)){
+                sfr = 1;
+            }else if(isStart(state)){
+                sfr = -1;
+            }
+            name = (i==set.size()? state.toString():state.toString()+", ");
+            i++;
+        }
+        //create state as start final or regular with name
+        switch(sfr){
+            case 0: dfa.addState(name);
+            case 1: dfa.addFinalState(name);
+            default: dfa.addStartState(name);
+        }
+        return name;
     }
 }
