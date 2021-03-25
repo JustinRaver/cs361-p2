@@ -28,7 +28,7 @@ public class NFAState extends State {
      * @return the States transitions or null if they are absent
      */
     public Set<NFAState> getTransitions(String s){
-            return this.transitions.get(s);
+        return this.transitions.get(s);
     }
 
     /**
@@ -41,7 +41,8 @@ public class NFAState extends State {
             updateMapSet(sym,state);
         }else{
             Set<NFAState> set = new HashSet<>();
-            set.add(new NFAState(state));
+            NFAState currState = new NFAState(state);
+            set.add(currState.equals(this)? this:currState);
             transitions.put(sym,set);
         }
     }
