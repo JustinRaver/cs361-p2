@@ -3,6 +3,7 @@ package fa.nfa;
 import fa.State;
 import fa.dfa.DFA;
 import fa.dfa.DFAState;
+
 import java.util.*;
 
 /**
@@ -33,7 +34,7 @@ public class NFA implements NFAInterface {
 
         if (getState(name) == null) {
             states.add(state);
-        }else{
+        } else {
             this.startState = getState(name);
         }
     }
@@ -49,7 +50,7 @@ public class NFA implements NFAInterface {
             NFAState state = new NFAState(name);
             finalStates.add(state);
             states.add(state);
-        }else{
+        } else {
             finalStates.add(getState(name));
         }
     }
@@ -156,7 +157,7 @@ public class NFA implements NFAInterface {
             Set<NFAState> transitions = stack.pop().getTransitions("e");
             if (transitions != null) {
                 for (NFAState state : transitions) {
-                    if(!visited.contains(state)) {
+                    if (!visited.contains(state)) {
                         stack.push(state);
                         set.add(state);
                         visited.add(state);
@@ -211,7 +212,7 @@ public class NFA implements NFAInterface {
         SortedSet<NFAState> retSet = new TreeSet<>(Comparator.comparing(State::toString));
 //        For each symbol in the set get the empty transitions states too
         for (NFAState state : transOnSym) {
-                retSet.addAll(eClosure(state));
+            retSet.addAll(eClosure(state));
         }
         return retSet;
     }
@@ -236,11 +237,11 @@ public class NFA implements NFAInterface {
             }
 
             if (startState && set.contains(this.startState)) {
-                if(isFinal(this.startState)){
+                if (isFinal(this.startState)) {
                     dfa.addFinalState(name);
                 }
                 dfa.addStartState(name);
-            }else if (isFinal) {
+            } else if (isFinal) {
                 dfa.addFinalState(name);
             } else {
                 dfa.addState(name);
