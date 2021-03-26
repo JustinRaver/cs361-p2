@@ -25,7 +25,6 @@ public class NFA implements NFAInterface {
         this.states = new LinkedHashSet<>();
         this.alphabet = new LinkedHashSet<>();
         this.finalStates = new LinkedHashSet<>();
-        this.startState = null;
     }
 
     @Override
@@ -57,7 +56,7 @@ public class NFA implements NFAInterface {
         //add transition symbol to the alphabet
         alphabet.add(onSym);
         //add transition
-        Objects.requireNonNull(getState(fromState)).setTransitions(String.valueOf(onSym), getState(toState));
+        getState(fromState).setTransitions(String.valueOf(onSym), getState(toState));
     }
 
     @Override
@@ -96,35 +95,38 @@ public class NFA implements NFAInterface {
         while (!q.isEmpty()) {
             Set<NFAState> currSet = q.remove();
             String newDfaState = getSetName(currSet);
+            visited.add(newDfaState);
 
             if (!statesCreated.contains(newDfaState)) {
                 createDFAState(currSet, dfa);
                 statesCreated.add(newDfaState);
             }
-            visited.add(newDfaState);
 
             //go thru the alphabet and get transitions for each sym adding unique transitions to queue
             for (Character c : alphabet) {
+                //check for the empty transition in the alphabet
                 if (c == 'e') {
                     continue;
                 }
+
+                //set to contain the combined transitions for new state
                 Set<NFAState> transOnC = combineSets(String.valueOf(c), currSet);
-                String setName = getSetName(transOnC);
-                if (setName.isEmpty()) {
-                    String emptyState = null;
-                    if (!statesCreated.contains("[]")) {
-                        emptyState = createDFAState(transOnC, dfa).toString();
-                        statesCreated.add("[]");
-                    }
+                String toState = getSetName(transOnC);
+                if (toState.isEmpty()) {
+                    String emptyState = createDFAState(transOnC, dfa).toString();
+//                    if (!statesCreated.contains("[]")) {
+//                        emptyState = createDFAState(transOnC, dfa).toString();
+//                        statesCreated.add("[]");
+//                    }
                     dfa.addTransition(newDfaState, c, emptyState);
                 } else {
-                    if (!statesCreated.contains(setName)) {
+                    if (!statesCreated.contains(toState)) {
                         createDFAState(transOnC, dfa);
-                        statesCreated.add(setName);
+                        statesCreated.add(toState);
                     }
-                    dfa.addTransition(newDfaState, c, setName);
+                    dfa.addTransition(newDfaState, c, toState);
 
-                    if (!visited.contains(setName)) {
+                    if (!visited.contains(toState)) {
                         q.add(transOnC);
                     }
                 }
@@ -141,8 +143,10 @@ public class NFA implements NFAInterface {
 
     @Override
     public Set<NFAState> eClosure(NFAState s) {
+        Set<NFAState> set = new HashSet<>();
+        Set<NFAState> visited = new HashSet<>();
         //Depth first algorithm:
-        SortedSet<NFAState> set = new TreeSet<>(Comparator.comparing(State::toString));
+//        SortedSet<NFAState> set = new TreeSet<>(Comparator.comparing(State::toString));
         set.add(s);
         // create stack push root node to stack
         Stack<NFAState> stack = new Stack<>();
@@ -155,8 +159,11 @@ public class NFA implements NFAInterface {
             Set<NFAState> transitions = stack.pop().getTransitions("e");
             if (transitions != null) {
                 for (NFAState state : transitions) {
-                    stack.push(state);
-                    set.add(state);
+                    if(!visited.contains(state)) {
+                        stack.push(state);
+                        set.add(state);
+                        visited.add(state);
+                    }
                 }
             }
         }
@@ -189,13 +196,6 @@ public class NFA implements NFAInterface {
         return false;
     }
 
-    /**
-     * @param state state to compare
-     * @return true if the state is teh start state false otherwise
-     */
-    private boolean isStart(NFAState state) {
-        return state.equals(startState);
-    }
 
     /**
      * @param currSet the set of nfa states
@@ -203,12 +203,12 @@ public class NFA implements NFAInterface {
      * @return the set of combined transitions
      */
     public Set<NFAState> combineSets(String sym, Set<NFAState> currSet) {
+//        Set<NFAState> transOnSym = new HashSet<>();
         SortedSet<NFAState> transOnSym = new TreeSet<>(Comparator.comparing(State::toString));
 
         for (NFAState state : currSet) {
             if (state.getTransitions(sym) != null) {
                 transOnSym.addAll(state.getTransitions(sym));
-//                transOnSym.addAll(eClosure(state));
             }
         }
 //        For each symbol in the set get the empty transitions states too
@@ -229,6 +229,7 @@ public class NFA implements NFAInterface {
             dfa.addState(name);
         } else {
             boolean isFinal = false;
+            boolean startState = dfa.getStartState() == null;
 
             for (NFAState s : set) {
                 if (isFinal(s)) {
@@ -236,7 +237,7 @@ public class NFA implements NFAInterface {
                 }
             }
 
-            if (dfa.getStartState() == null) {
+            if (startState && set.contains(this.startState)) {
                 dfa.addStartState(name);
             }else if (isFinal) {
                 dfa.addFinalState(name);
