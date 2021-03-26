@@ -10,9 +10,9 @@ import java.util.Set;
  * @author elenasherman
  */
 public class DFA implements DFAInterface {
-    private Set<DFAState> states;
+    private final Set<DFAState> states;
     private DFAState start;
-    private Set<Character> ordAbc;
+    private final Set<Character> ordAbc;
 
     public DFA() {
         states = new LinkedHashSet<DFAState>();
@@ -82,9 +82,7 @@ public class DFA implements DFAInterface {
         }
         from.addTransition(onSymb, to);
 
-        if (!ordAbc.contains(onSymb)) {
-            ordAbc.add(onSymb);
-        }
+        ordAbc.add(onSymb);
     }
 
     /**
@@ -131,7 +129,6 @@ public class DFA implements DFAInterface {
         s += "}\n";
         //create transition table
         s += "delta =\n" + String.format("%10s", "");
-        ;
         for (char c : ordAbc) {
             s += String.format("%10s", c);
         }

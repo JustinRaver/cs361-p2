@@ -16,7 +16,7 @@ public class DFAState extends State {
 
 
     private HashMap<Character, DFAState> delta;//delta
-    private boolean isFinal;//remembers its type
+    private final boolean isFinal;//remembers its type
 
     /**
      * Default constructor
