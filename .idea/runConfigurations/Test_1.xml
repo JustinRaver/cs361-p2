@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Test 1" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="fa.nfa.NFADriver" />
+    <module name="cs361-p2" />
+    <option name="PROGRAM_PARAMETERS" value="./tests/p2tc1.txt" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
