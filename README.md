@@ -6,15 +6,23 @@
 
 ## Overview
 
-Concisely explain what the program does. If this exceeds a couple of sentences, you're going too far. Generally you
-should be pulling this right from the project specification. I don't want you to just cut and paste, but paraphrase what
-is stated in the project specification.
+This program models an instance of a non-deterministic finite automaton.
+
+This program implements NFA and NFAState. The NFA's can be created and
+tested using the NFADriver class along with the supplied testing files.
+NFA is implemented using the definition of a NFA with the 5-tuple
+(Q, Σ, δ, q0, F ).
 
 ## Compiling and Using
 
-This section should tell the user how to compile your code. It is also appropriate to instruct the user how to use your
-code. Does your program require user input? If so, what does your user need to know about it to use it as quickly as
-possible?
+```
+ From the directory containing all .java files:
+ 
+ Build: javac * .java
+ 
+ Run: java fa.nfa.NFADriver ./tests/<test name>
+ 
+```
 
 ## Discussion
 
@@ -33,23 +41,6 @@ guideline to get you thinking.
 
 ## Testing
 
-In this section, tell us how you tested your project.
-
-You are expected to test your projects before submitting them for final review. Pretend that your instructor is your
-manager or customer at work. How would you ensure that you are delivering a working solution to their requirements?
-
-## Extra Credit
-
-If the project had opportunities for extra credit that you attempted, be sure to call it out so the grader does not
-overlook it.
-
-## Sources used
-
-If you used any sources outside of the lecture notes, class lab files, or text book you need to list them here. If you
-looked something up on stackoverflow.com and fail to cite it in this section it will be considered plagiarism and be
-dealt with accordingly. So be safe CITE!
-[Here is some help creating links](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet#links)
-
-----------
-This README template is using Markdown. To preview your README output, you can copy your file contents to a Markdown
-editor/previewer such as [https://stackedit.io/editor](https://stackedit.io/editor).
+We tested our program thoroughly using the supplied test cases in the project description and the test cases 
+posted on Piazza.
+Through our testing we were able to confirm that our program works as expected.
