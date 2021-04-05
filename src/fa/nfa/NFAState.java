@@ -2,17 +2,13 @@ package fa.nfa;
 
 import fa.State;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author JustinRaver, NickStolarow
  * @version 1.0
  */
 public class NFAState extends State {
-
     //instance variables
     private final Map<String, Set<NFAState>> transitions;
 
@@ -20,7 +16,7 @@ public class NFAState extends State {
      * Basic Constructor
      */
     public NFAState(String name) {
-        this.transitions = new HashMap<>();
+        this.transitions = new LinkedHashMap<>();
         super.name = name;
     }
 

@@ -134,7 +134,7 @@ public class NFA implements NFAInterface {
                     String emptyState = createDFAState(transOnC, dfa).toString();
                     dfa.addTransition(newDfaState, c, emptyState);
                 } else {
-                    //if the state isnt already created then create one and add to statesCreated
+                    //if the state isn't already created then create one and add to statesCreated
                     if (!statesCreated.contains(toState)) {
                         createDFAState(transOnC, dfa);
                         statesCreated.add(toState);
@@ -159,10 +159,10 @@ public class NFA implements NFAInterface {
 
     @Override
     public Set<NFAState> eClosure(NFAState s) {
-        //Set to keep the eclosure
-        Set<NFAState> set = new HashSet<>();
+        //Set to keep the eClosure
+        Set<NFAState> set = new TreeSet<>(Comparator.comparing(State::toString));
         //set to keep the visited nodes
-        Set<NFAState> visited = new HashSet<>();
+        Set<NFAState> visited = new TreeSet<>(Comparator.comparing(State::toString));
         //Depth first algorithm:
         set.add(s);
         // create stack push root node to stack
@@ -185,7 +185,7 @@ public class NFA implements NFAInterface {
                 }
             }
         }
-        //Return the eclosure
+        //Return the eClosure
         return set;
     }
 
@@ -226,7 +226,7 @@ public class NFA implements NFAInterface {
      */
     public Set<NFAState> combineSets(String sym, Set<NFAState> currSet) {
         //Set to hold the combination of set transitions on sym
-        Set<NFAState> transOnSym = new HashSet<>();
+        Set<NFAState> transOnSym = new TreeSet<>(Comparator.comparing(State::toString));
 
         //go through each nfa state and add transitions for sym to transOnSym
         for (NFAState state : currSet) {
@@ -235,7 +235,7 @@ public class NFA implements NFAInterface {
             }
         }
 
-        //New set to hold the eclosure of all states in the transOnSym set
+        //New set to hold the eClosure of all states in the transOnSym set
         SortedSet<NFAState> retSet = new TreeSet<>(Comparator.comparing(State::toString));
         //For each symbol in the set get the empty transitions states too
         for (NFAState state : transOnSym) {
