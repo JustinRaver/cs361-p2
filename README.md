@@ -17,7 +17,7 @@ NFA is implemented using the definition of a NFA with the 5-tuple
 
 ```
  
- Build: javac src/fa/nfa/NFADriver.java
+ Build: javac fa/nfa/NFADriver.java
  
  Run: java fa.nfa.NFADriver ./tests/<test name>
  
