@@ -36,6 +36,7 @@ public class NFAState extends State {
      * @param state the state we transition to on sym
      */
     public void setTransitions(String sym, NFAState state) {
+        //check if the transition set exists if it does add to it else create a new set
         if (transitions.containsKey(sym)) {
             transitions.get(sym).add(state);
         } else {
