@@ -18,18 +18,21 @@ possible?
 
 ## Discussion
 
-Discuss the issues and successes you encountered during programming
-(development). Here are some questions to get you started. You don't have to answer all of them in order - they are a
-guideline to get you thinking.
+This program extended the functionality from the previous project and made much of the initial 
+programming simple to implement. Right Away we were able to quickly implement the NFA state class 
+and many of the NFA methods. This gave us the basic structure of the NFA and allowed us to test
+as we implemented others more complicated portions of the assignment.
 
-* What problems did you have? What went well?
-* What process did you go through to create the program?
-* What did you have to research and learn on your own?
-* What kinds of errors did you get? How did you fix them?
-* What parts of the project did you find challenging?
-* Is there anything that finally "clicked" for you in the process of working on this project?
-* Is there anything that you would change about the project?
-* Can you apply what you learned in this project to future projects?
+The most challenging aspects of the project were the eClosure and the getDFA methods. The eclosure
+was quick to implement with the traditional stack data structure and upon testing we found the initial
+implementation was almost perfect. With minor tweaks that ensured visited nodes were not revisited it 
+worked perfectly. The most challenging method by far was the getDfa method which we broke into several 
+sub methods. These methods included getStateName, createDFAState, and combine sets. With the separation 
+of these methods we were able to test easily and quickly implement the method without issue. 
+
+Some other issues we ran into were issues with creating the states in the right order, creating states 
+that were both initial and final, the ordering of the DFA state sets, and finally the creation of new 
+DFA states that combine multiple NFA states.
 
 ## Testing
 
